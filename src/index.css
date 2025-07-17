@@ -8,24 +8,25 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Dark glassmorphism theme */
+    --background: 220 15% 8%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 220 15% 12% / 0.8;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 220 15% 12% / 0.95;
+    --popover-foreground: 210 40% 98%;
 
     --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
     --primary-glow: 217 100% 70%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 15% 18% / 0.8;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 15% 15% / 0.6;
+    --muted-foreground: 215.4 16.3% 65%;
 
     --accent: 217 91% 60%;
     --accent-foreground: 0 0% 100%;
@@ -33,19 +34,21 @@ All colors MUST be HSL.
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border: 220 15% 25% / 0.3;
+    --input: 220 15% 18% / 0.8;
     --ring: 217 91% 60%;
 
-    /* Blue gradient design system */
+    /* Dark gradient design system */
     --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 100% 70%));
     --gradient-secondary: linear-gradient(135deg, hsl(217 91% 60% / 0.1), hsl(217 100% 70% / 0.05));
-    --gradient-background: linear-gradient(135deg, hsl(0 0% 100%), hsl(217 100% 98%));
+    --gradient-background: linear-gradient(135deg, hsl(220 15% 8%), hsl(220 20% 12%));
+    --gradient-card: linear-gradient(135deg, hsl(220 15% 12% / 0.8), hsl(220 15% 15% / 0.6));
     
-    /* Shadows with blue tint */
-    --shadow-elegant: 0 10px 30px -10px hsl(217 91% 60% / 0.2);
+    /* Glass effect shadows */
+    --shadow-elegant: 0 8px 32px 0 hsl(0 0% 0% / 0.37);
     --shadow-glow: 0 0 40px hsl(217 100% 70% / 0.15);
-    --shadow-card: 0 4px 6px -1px hsl(217 91% 60% / 0.1), 0 2px 4px -1px hsl(217 91% 60% / 0.06);
+    --shadow-card: 0 8px 32px 0 hsl(0 0% 0% / 0.2), 0 0 0 1px hsl(220 15% 25% / 0.3);
+    --shadow-glass: 0 8px 32px 0 hsl(0 0% 0% / 0.37), inset 0 1px 0 hsl(255 255% 255% / 0.1);
 
     --radius: 0.5rem;
 
