@@ -72,17 +72,12 @@ export default {
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
 				'gradient-secondary': 'var(--gradient-secondary)',
-				'gradient-background': 'var(--gradient-background)',
-				'gradient-card': 'var(--gradient-card)'
+				'gradient-background': 'var(--gradient-background)'
 			},
 			boxShadow: {
 				'elegant': 'var(--shadow-elegant)',
 				'glow': 'var(--shadow-glow)',
-				'card': 'var(--shadow-card)',
-				'glass': 'var(--shadow-glass)'
-			},
-			backdropBlur: {
-				'glass': '20px'
+				'card': 'var(--shadow-card)'
 			},
 			keyframes: {
 				'accordion-down': {
