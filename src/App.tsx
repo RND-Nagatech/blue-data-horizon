@@ -22,9 +22,20 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<Dashboard />} />
-            <Route path="data-entry" element={<div className="p-6">Data Entry Page - Coming Soon</div>} />
+            
+            {/* Master Routes */}
+            <Route path="master/item" element={<div className="p-6">Master Item Page - Coming Soon</div>} />
+            <Route path="master/group" element={<div className="p-6">Master Group Page - Coming Soon</div>} />
+            <Route path="master/price" element={<div className="p-6">Master Price Page - Coming Soon</div>} />
+            <Route path="master/category" element={<div className="p-6">Master Category Page - Coming Soon</div>} />
+            
+            {/* Transaction Routes */}
+            <Route path="transaction/sales" element={<div className="p-6">Sales Order Page - Coming Soon</div>} />
+            <Route path="transaction/purchase" element={<div className="p-6">Purchase Order Page - Coming Soon</div>} />
+            <Route path="transaction/production" element={<div className="p-6">Production Order Page - Coming Soon</div>} />
+            
+            {/* Other Routes */}
             <Route path="reports" element={<div className="p-6">Reports Page - Coming Soon</div>} />
-            <Route path="database" element={<div className="p-6">Database Page - Coming Soon</div>} />
             <Route path="users" element={<div className="p-6">Users Page - Coming Soon</div>} />
             <Route path="settings" element={<div className="p-6">Settings Page - Coming Soon</div>} />
           </Route>

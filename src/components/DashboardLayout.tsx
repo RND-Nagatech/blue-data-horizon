@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { 
   SidebarProvider, 
@@ -10,6 +10,9 @@ import {
   SidebarMenu, 
   SidebarMenuButton, 
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarTrigger,
   useSidebar
 } from "@/components/ui/sidebar";
@@ -22,8 +25,17 @@ import {
   Users, 
   Database,
   LogOut,
-  Bell
+  Bell,
+  ChevronDown,
+  Package,
+  Tags,
+  DollarSign,
+  FolderTree,
+  ShoppingCart,
+  Truck,
+  Factory
 } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const navigationItems = [
   {
@@ -32,19 +44,58 @@ const navigationItems = [
     icon: LayoutDashboard,
   },
   {
-    title: "Data Entry",
-    url: "/dashboard/data-entry",
-    icon: FileText,
+    title: "Master",
+    icon: Database,
+    isGroup: true,
+    items: [
+      {
+        title: "Master Item",
+        url: "/dashboard/master/item",
+        icon: Package,
+      },
+      {
+        title: "Master Group",
+        url: "/dashboard/master/group",
+        icon: FolderTree,
+      },
+      {
+        title: "Master Price",
+        url: "/dashboard/master/price",
+        icon: DollarSign,
+      },
+      {
+        title: "Master Category",
+        url: "/dashboard/master/category",
+        icon: Tags,
+      },
+    ]
+  },
+  {
+    title: "Transaction",
+    icon: ShoppingCart,
+    isGroup: true,
+    items: [
+      {
+        title: "Sales Order",
+        url: "/dashboard/transaction/sales",
+        icon: ShoppingCart,
+      },
+      {
+        title: "Purchase Order",
+        url: "/dashboard/transaction/purchase",
+        icon: Truck,
+      },
+      {
+        title: "Production Order",
+        url: "/dashboard/transaction/production",
+        icon: Factory,
+      },
+    ]
   },
   {
     title: "Reports",
     url: "/dashboard/reports",
     icon: BarChart3,
-  },
-  {
-    title: "Database",
-    url: "/dashboard/database",
-    icon: Database,
   },
   {
     title: "Users",
@@ -62,9 +113,35 @@ function AppSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
   const currentPath = location.pathname;
+  const [openGroups, setOpenGroups] = useState<string[]>([]);
 
   const isActive = (path: string) => currentPath === path;
   const isCollapsed = state === "collapsed";
+  
+  const isGroupActive = (items: any[]) => {
+    return items.some(item => isActive(item.url));
+  };
+
+  const toggleGroup = (title: string) => {
+    setOpenGroups(prev => 
+      prev.includes(title) 
+        ? prev.filter(group => group !== title)
+        : [...prev, title]
+    );
+  };
+
+  // Auto-expand groups that contain active items
+  const getInitialOpenGroups = () => {
+    return navigationItems
+      .filter(item => item.isGroup && item.items && isGroupActive(item.items))
+      .map(item => item.title);
+  };
+
+  // Initialize open groups on mount
+  useEffect(() => {
+    const initialGroups = getInitialOpenGroups();
+    setOpenGroups(initialGroups);
+  }, [currentPath]);
 
   return (
     <Sidebar className="border-r border-border/50 bg-white/80 backdrop-blur-sm" collapsible="icon">
@@ -89,25 +166,92 @@ function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
-              {navigationItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a
-                      href={item.url}
-                      className={`
-                        flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200
-                        ${isActive(item.url) 
-                          ? "bg-gradient-primary text-white shadow-card" 
-                          : "text-foreground hover:bg-muted/50 hover:shadow-sm"
-                        }
-                      `}
-                    >
-                      <item.icon className="w-4 h-4 flex-shrink-0" />
-                      {!isCollapsed && <span className="text-sm font-medium">{item.title}</span>}
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {navigationItems.map((item) => {
+                if (item.isGroup && item.items) {
+                  const isGroupExpanded = openGroups.includes(item.title);
+                  const hasActiveChild = isGroupActive(item.items);
+                  
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <Collapsible 
+                        open={isGroupExpanded} 
+                        onOpenChange={() => toggleGroup(item.title)}
+                      >
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton
+                            className={`
+                              flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 w-full
+                              ${hasActiveChild 
+                                ? "bg-gradient-secondary text-primary shadow-sm" 
+                                : "text-foreground hover:bg-muted/50 hover:shadow-sm"
+                              }
+                            `}
+                          >
+                            <item.icon className="w-4 h-4 flex-shrink-0" />
+                            {!isCollapsed && (
+                              <>
+                                <span className="text-sm font-medium flex-1 text-left">{item.title}</span>
+                                <ChevronDown 
+                                  className={`w-4 h-4 transition-transform duration-200 ${
+                                    isGroupExpanded ? "rotate-180" : ""
+                                  }`} 
+                                />
+                              </>
+                            )}
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        
+                        {!isCollapsed && (
+                          <CollapsibleContent>
+                            <SidebarMenuSub className="ml-4 mt-2 space-y-1">
+                              {item.items.map((subItem) => (
+                                <SidebarMenuSubItem key={subItem.title}>
+                                  <SidebarMenuSubButton asChild>
+                                    <a
+                                      href={subItem.url}
+                                      className={`
+                                        flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200
+                                        ${isActive(subItem.url) 
+                                          ? "bg-gradient-primary text-white shadow-card" 
+                                          : "text-muted-foreground hover:text-foreground hover:bg-muted/30"
+                                        }
+                                      `}
+                                    >
+                                      <subItem.icon className="w-3 h-3 flex-shrink-0" />
+                                      <span className="text-xs font-medium">{subItem.title}</span>
+                                    </a>
+                                  </SidebarMenuSubButton>
+                                </SidebarMenuSubItem>
+                              ))}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        )}
+                      </Collapsible>
+                    </SidebarMenuItem>
+                  );
+                } else {
+                  // Regular menu item
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton asChild>
+                        <a
+                          href={item.url}
+                          className={`
+                            flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200
+                            ${isActive(item.url!) 
+                              ? "bg-gradient-primary text-white shadow-card" 
+                              : "text-foreground hover:bg-muted/50 hover:shadow-sm"
+                            }
+                          `}
+                        >
+                          <item.icon className="w-4 h-4 flex-shrink-0" />
+                          {!isCollapsed && <span className="text-sm font-medium">{item.title}</span>}
+                        </a>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                }
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
